@@ -13,7 +13,6 @@
       --pink2:#ff86c2;
       --text:#fff;
     }
-
     *{ box-sizing:border-box; margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
     body{
       height:100vh;
@@ -27,7 +26,7 @@
       color:var(--text);
     }
 
-    /* 3D floating hearts background */
+    /* Floating 3D hearts background */
     .hearts-bg{
       position:fixed; inset:0;
       pointer-events:none;
@@ -54,20 +53,21 @@
     .heart3d::before{ left:-13px; top:0; }
     .heart3d::after{ left:0; top:-13px; }
     @keyframes floatUp{
-      0%{ transform: translate3d(0, 120vh, -200px) rotate(45deg) rotateX(0deg) rotateY(0deg); }
-      100%{ transform: translate3d(var(--dx), -30vh, 220px) rotate(45deg) rotateX(360deg) rotateY(360deg); }
+      0%{ transform: translate3d(0, 120vh, -200px) rotate(45deg); }
+      100%{ transform: translate3d(var(--dx), -30vh, 220px) rotate(45deg); }
     }
 
-    /* Card */
+    /* Card container */
     .wrap{
       width:min(520px, 92vw);
       perspective: 1400px;
       position:relative;
       z-index:2;
     }
+
     .card{
       width:100%;
-      min-height:380px;
+      min-height:390px;
       position:relative;
       transform-style:preserve-3d;
       transition: transform 1.1s cubic-bezier(.2,.8,.2,1);
@@ -89,18 +89,25 @@
 
     .front{
       transform: translateZ(2px);
-      display:flex; align-items:center; justify-content:center;
-      flex-direction:column; gap:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:14px;
       text-align:center;
     }
 
     .inside{
       transform: rotateY(180deg) translateZ(2px);
-      display:flex; align-items:center; justify-content:center;
-      flex-direction:column; gap:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:14px;
       text-align:center;
     }
 
+    /* 3D shine */
     .shine{
       position:absolute;
       inset:-60%;
@@ -129,7 +136,7 @@
       border-radius: 14px;
       font-weight: 900;
       cursor:pointer;
-      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      transition: transform .18s ease, filter .18s ease;
       color:white;
       box-shadow: 0 14px 26px rgba(0,0,0,.30);
       user-select:none;
@@ -150,7 +157,7 @@
       background: linear-gradient(135deg, #ff2d2d, #ff7c7c);
     }
 
-    /* big heart */
+    /* Big heart */
     .big-heart{
       width:120px;height:120px;
       position:relative;
@@ -185,10 +192,9 @@
       justify-content:center;
       flex-wrap:wrap;
       margin-top: 12px;
-      position:relative;
     }
 
-    /* NO runaway area */
+    /* NO area */
     .no-area{
       position:relative;
       width:240px;
@@ -199,14 +205,11 @@
     }
     .btn-no{ position:absolute; }
 
-    .hint{ margin-top:8px; font-size:13px; opacity:.85; }
-
-    /* message bubble on NO attempts */
+    /* NO attempt messages */
     .no-msg{
       min-height: 22px;
-      font-weight:800;
+      font-weight:900;
       font-size: 15px;
-      color: #fff;
       opacity: 0;
       transform: translateY(6px);
       transition: opacity .25s ease, transform .25s ease;
@@ -217,7 +220,9 @@
       transform: translateY(0px);
     }
 
-    /* final overlay */
+    .hint{ margin-top:8px; font-size:13px; opacity:.85; }
+
+    /* Final fireworks screen */
     .final{
       position:fixed;
       inset:0;
@@ -243,35 +248,13 @@
       height:100%;
     }
 
+    /* Flip */
     .card.open{ transform: rotateY(180deg); }
-
-    /* music mini badge */
-    .music-badge{
-      position:fixed;
-      right:14px; top:14px;
-      z-index:12;
-      padding:10px 12px;
-      border-radius:14px;
-      background: rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.18);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 18px 40px rgba(0,0,0,.35);
-      font-weight:800;
-      cursor:pointer;
-      user-select:none;
-    }
   </style>
 </head>
 
 <body>
   <div class="hearts-bg" id="heartsBg"></div>
-
-  <!-- Love Music -->
-  <audio id="loveAudio" loop preload="auto">
-    <source src="love.mp3" type="audio/mpeg">
-  </audio>
-
-  <div class="music-badge" id="musicBtn">🔊 Tap for music</div>
 
   <div class="wrap">
     <div class="card" id="card">
@@ -282,7 +265,7 @@
         <div class="title">Valentine Card 💌</div>
         <div class="sub">Tap to open</div>
         <button class="btn btn-open" id="openBtn">Click → Open Card</button>
-        <div class="hint">Premium 3D look ✨</div>
+        <div class="hint">Premium 3D theme ✨</div>
       </div>
 
       <!-- INSIDE -->
@@ -318,57 +301,21 @@
     for (let i = 0; i < HEARTS; i++) {
       const h = document.createElement("div");
       h.className = "heart3d";
-      const left = Math.random() * 100;
-      const delay = Math.random() * 6;
-      const dur = 7 + Math.random() * 7;
-      const dx = (Math.random() * 120 - 60).toFixed(1) + "px";
-
-      h.style.left = left + "vw";
-      h.style.setProperty("--dur", dur + "s");
-      h.style.setProperty("--dx", dx);
-      h.style.animationDelay = (-delay) + "s";
+      h.style.left = (Math.random() * 100) + "vw";
+      h.style.setProperty("--dur", (7 + Math.random() * 7) + "s");
+      h.style.setProperty("--dx", ((Math.random() * 120 - 60).toFixed(1)) + "px");
+      h.style.animationDelay = (-(Math.random() * 6)) + "s";
       h.style.opacity = (0.45 + Math.random() * 0.45).toFixed(2);
       heartsBg.appendChild(h);
     }
 
-    /* Music (iPhone requires user gesture) */
-    const loveAudio = document.getElementById("loveAudio");
-    const musicBtn = document.getElementById("musicBtn");
-    let musicOn = false;
-
-    async function toggleMusic(){
-      try{
-        if(!musicOn){
-          await loveAudio.play();
-          musicOn = true;
-          musicBtn.textContent = "🎵 Music ON";
-        }else{
-          loveAudio.pause();
-          musicOn = false;
-          musicBtn.textContent = "🔊 Tap for music";
-        }
-      }catch(e){
-        musicBtn.textContent = "⚠️ Tap again for music";
-      }
-    }
-    musicBtn.addEventListener("click", toggleMusic);
-
     /* Card open */
     const card = document.getElementById("card");
-    document.getElementById("openBtn").addEventListener("click", async () => {
+    document.getElementById("openBtn").addEventListener("click", () => {
       card.classList.add("open");
-
-      // Start music automatically after first click if not started
-      if(!musicOn){
-        try{
-          await loveAudio.play();
-          musicOn = true;
-          musicBtn.textContent = "🎵 Music ON";
-        }catch(e){}
-      }
     });
 
-    /* NO runaway + message */
+    /* NO runaway + messages */
     const noBtn = document.getElementById("noBtn");
     const noArea = document.getElementById("noArea");
     const noMsg = document.getElementById("noMsg");
@@ -380,15 +327,14 @@
       "Don’t break my heart 💔",
       "Wrong button 😄",
       "Say YES please 😌",
-      "Try again 😝",
-      "Reconsider 👀"
+      "Reconsider 👀",
+      "Come on... YES 😍"
     ];
     let noCount = 0;
 
     function showNoText(){
-      const txt = noTexts[noCount % noTexts.length];
+      noMsg.textContent = noTexts[noCount % noTexts.length];
       noCount++;
-      noMsg.textContent = txt;
       noMsg.classList.add("show");
       clearTimeout(window.__noTimer);
       window.__noTimer = setTimeout(()=> noMsg.classList.remove("show"), 1200);
@@ -399,33 +345,31 @@
       const btnW = noBtn.offsetWidth;
       const btnH = noBtn.offsetHeight;
 
-      // left-right (idhar udhar) movement with random Y
       const x = Math.random() * (rect.width - btnW);
       const y = Math.random() * (rect.height - btnH);
 
       noBtn.style.transform = `translate(${x}px, ${y}px) translateZ(20px)`;
     }
 
-    // move away on hover/touch/click
     noBtn.addEventListener("mouseenter", () => { showNoText(); runaway(); });
     noBtn.addEventListener("click", (e) => { e.preventDefault(); showNoText(); runaway(); });
-
     noBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
       showNoText();
       runaway();
     }, { passive:false });
 
-    /* YES -> final fireworks */
+    /* YES -> fireworks */
     const finalScreen = document.getElementById("finalScreen");
     document.getElementById("yesBtn").addEventListener("click", () => {
       finalScreen.style.display = "flex";
       startFireworks();
     });
 
-    /* Fireworks */
+    /* Fireworks Canvas */
     const canvas = document.getElementById("fw");
     const ctx = canvas.getContext("2d");
+
     function resize(){
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -454,8 +398,8 @@
 
     function startFireworks(){
       if(animId) cancelAnimationFrame(animId);
-
       let t=0;
+
       function loop(){
         animId = requestAnimationFrame(loop);
         ctx.fillStyle = "rgba(0,0,0,0.16)";
